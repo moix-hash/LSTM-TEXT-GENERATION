@@ -6,11 +6,6 @@ import re
 import numpy as np
 import pickle
 
-
-# ─────────────────────────────────────────────
-# 1. TEXT CLEANING
-# ─────────────────────────────────────────────
-
 def clean_text(text: str) -> str:
     """
     Lowercase the text and strip characters that are not
@@ -22,10 +17,6 @@ def clean_text(text: str) -> str:
     return text
 
 
-# ─────────────────────────────────────────────
-# 2. SEQUENCE BUILDING (used during training)
-# ─────────────────────────────────────────────
-
 def build_sequences(tokenizer, corpus: str, seq_length: int = 30):
     """
     Tokenise *corpus* with an **already-fitted** Keras Tokenizer,
@@ -36,7 +27,7 @@ def build_sequences(tokenizer, corpus: str, seq_length: int = 30):
     X : np.ndarray  shape (n_samples, seq_length)
     y : np.ndarray  shape (n_samples,)  – raw integer labels
     """
-    from tensorflow.keras.preprocessing.sequence import pad_sequences  # lazy import
+    from tensorflow.keras.preprocessing.sequence import pad_sequences  
 
     tokens = tokenizer.texts_to_sequences([corpus])[0]
 
@@ -45,14 +36,10 @@ def build_sequences(tokenizer, corpus: str, seq_length: int = 30):
         sequences.append(tokens[i - seq_length : i + 1])
 
     sequences = np.array(sequences)
-    X = sequences[:, :-1]          # all columns except last
-    y = sequences[:, -1]           # last column (target)
+    X = sequences[:, :-1]          
+    y = sequences[:, -1]           
     return X, y
 
-
-# ─────────────────────────────────────────────
-# 3. TEXT GENERATION
-# ─────────────────────────────────────────────
 
 def sample_with_temperature(predictions: np.ndarray, temperature: float = 1.0) -> int:
     """
@@ -62,7 +49,7 @@ def sample_with_temperature(predictions: np.ndarray, temperature: float = 1.0) -
     """
     predictions = np.asarray(predictions, dtype=np.float64)
     predictions = np.log(predictions + 1e-10) / temperature
-    exp_preds   = np.exp(predictions - predictions.max())   # numerically stable
+    exp_preds   = np.exp(predictions - predictions.max())   
     probabilities = exp_preds / exp_preds.sum()
     return np.random.choice(len(probabilities), p=probabilities)
 
@@ -87,7 +74,7 @@ def generate_text(
     seq_length  : window length the model was trained with
     temperature : creativity control (0.5 = conservative, 1.5 = creative)
     """
-    from tensorflow.keras.preprocessing.sequence import pad_sequences  # lazy import
+    from tensorflow.keras.preprocessing.sequence import pad_sequences  
 
     output_text = seed_text.strip()
 
@@ -107,11 +94,6 @@ def generate_text(
         output_text += " " + next_word
 
     return output_text
-
-
-# ─────────────────────────────────────────────
-# 4. SERIALISATION HELPERS
-# ─────────────────────────────────────────────
 
 def save_tokenizer(tokenizer, path: str = "models/tokenizer.pkl") -> None:
     with open(path, "wb") as f:
