@@ -1,4 +1,4 @@
-# ✍️ LSTM Text Generator
+#  LSTM Text Generator
 
 A Streamlit web-app that uses a two-layer LSTM trained on Shakespeare's complete works to continue any seed phrase you provide.
 
@@ -48,15 +48,7 @@ The first launch will **automatically download the Shakespeare corpus and train 
 
 ---
 
-## Deploy to Streamlit Cloud
-
-1. Push this repository to GitHub (public or private).
-2. Go to [share.streamlit.io](https://share.streamlit.io) → **New app**.
-3. Select the repo, set **Main file path** to `app.py`.
-4. Click **Deploy**.
-
-> ⚠️  Streamlit Cloud has a 1 GB RAM limit on the free tier. The training pipeline is heavy — **pre-train locally**, commit `models/lstm_model.keras` and `models/tokenizer.pkl` to the repo (use Git LFS for files > 100 MB), and the app will skip training on startup.
-
+# Deploy to Streamlit Cloud
 ---
 
 ## Key Hyperparameters (edit `train.py`)
